@@ -7,7 +7,7 @@ import heapq
 from collections import defaultdict
 
 app = Flask(__name__)
-app.secret_key = 'rahasiabgt'  # Dibutuhkan untuk session
+app.secret_key = os.environ.get('SECRET_KEY', 'fallback-default') # Dibutuhkan untuk session
 
 GRAPH_PATH = "depok.graphml"
 
