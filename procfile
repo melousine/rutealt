@@ -1,1 +1,1 @@
-web: gunicorn app.py:Flask(__name__)
+web: gunicorn app:app
