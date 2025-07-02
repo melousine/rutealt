@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, send_file, render_template, request, session
 import osmnx as ox
 import networkx as nx
 import folium
@@ -7,7 +7,7 @@ import heapq
 from collections import defaultdict
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'  # Dibutuhkan untuk session
+app.secret_key = 'rahasiabgt'  # Dibutuhkan untuk session
 
 GRAPH_PATH = "depok.graphml"
 
@@ -31,7 +31,6 @@ lokasi_pilihan = {
 }
 
 def is_margonda_edge(graph, u, v):
-    """Cek apakah edge adalah jalan Margonda"""
     edge_data = graph.get_edge_data(u, v)
     if edge_data:
         for key, data in edge_data.items():
@@ -41,10 +40,6 @@ def is_margonda_edge(graph, u, v):
     return False
 
 def dijkstra_with_margonda_preference(graph, start_node, end_node, margonda_penalty=500):
-    """
-    Implementasi Dijkstra dengan preferensi menghindari Margonda
-    margonda_penalty: penalti yang ditambahkan ke panjang jalan Margonda (meter)
-    """
     # Inisialisasi
     distances = defaultdict(lambda: float('infinity'))
     previous_nodes = {}
@@ -91,7 +86,6 @@ def dijkstra_with_margonda_preference(graph, start_node, end_node, margonda_pena
     return path if path and path[0] == start_node else None
 
 def get_route_details(graph, route):
-    """Mendapatkan detail rute (total jarak, segmen Margonda, dll)"""
     details = {
         'total_length': 0,
         'margonda_segments': 0,
@@ -229,6 +223,7 @@ def index():
         selected_asal=session.get('selected_asal', ''),
         selected_tujuan=session.get('selected_tujuan', '')
     )
+
 
 if __name__ == "__main__":
     app.run(debug=True)
